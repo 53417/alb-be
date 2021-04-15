@@ -4,7 +4,11 @@ import sqlTestController from '../controllers/sqlTestController.js';
 
 const router = express.Router();
 
-router.get('/executeQuery', authJwt.verifyToken, sqlTestController.executeQuery);
+router.get(
+  '/executeQuery',
+  authJwt.verifyToken,
+  sqlTestController.executeQuery
+);
 router.get('/getQuestion', authJwt.verifyToken, sqlTestController.getQuestion);
 router.get('/checkAnswer', authJwt.verifyToken, sqlTestController.checkAnswer);
 

@@ -5,8 +5,12 @@ const executeQuery = async (req, res) => {
   // execute the users query
   try {
     const { query } = req.query;
-    const executedQuery = await db.sequelize.query(query);
-    res.status(200).send(executedQuery[0]);
+    if (!verifyQuery(query)) {
+      res.status(200).send('illegal query');
+    } else {
+      const executedQuery = await db.sequelize.query(query);
+      res.status(200).send(executedQuery[0]);
+    }
   } catch (err) {
     res.status(200).send(err.message);
   }
@@ -15,7 +19,8 @@ const executeQuery = async (req, res) => {
 const getQuestion = (req, res) => {
   // TODO: put questions and schemas into a table
   const body = {
-    question: 'Write a query to get the number of unique Google users whose last login was in July, 2019, broken down by device type. Show the most used device in that period first.',
+    question:
+      'Write a query to get the number of unique Google users whose last login was in July, 2019, broken down by device type. Show the most used device in that period first.',
     schemas: [
       {
         tableName: 'sqltestusers',
@@ -27,29 +32,53 @@ const getQuestion = (req, res) => {
           { field: 'sign_up_source', type: 'string', nullable: 'nullable' },
           { field: 'unsubscribed', type: 'tinyint', nullable: 'not null' },
           { field: 'user_type', type: 'tinyint', nullable: 'not null' },
-        ]
+        ],
       },
       {
         tableName: 'sqltestgoogleusers',
         schema: [
           { field: 'id', type: 'int', nullable: 'not null' },
           { field: 'user_id', type: 'int', nullable: 'not null' },
-          { field: 'browser_language_code', type: 'string', nullable: 'not null' },
+          {
+            field: 'browser_language_code',
+            type: 'string',
+            nullable: 'not null',
+          },
           { field: 'created_on', type: 'datetime', nullable: 'not null' },
           { field: 'device_cat', type: 'string', nullable: 'not null' },
-        ]
+        ],
       },
-    ]
+    ],
   };
   res.status(200).send(body);
+};
+
+// good enough sql injection protection?
+const verifyQuery = (query) => {
+  const lower = query.toString().toLowerCase();
+  if (
+    lower.includes('update') ||
+    lower.includes('delete') ||
+    lower.includes('insert') ||
+    lower.includes('drop') ||
+    lower.includes(' users') ||
+    lower.includes(' roles')
+  ) {
+    return false;
+  } else {
+    return true;
+  }
 };
 
 const checkAnswer = async (req, res) => {
   try {
     const { query } = req.query;
-    const executedQuery = await db.sequelize.query(query);
-    // TODO: store in a db with sql questions?
-    const correctQuery = `
+    if (!verifyQuery(query)) {
+      res.status(200).send('illegal query');
+    } else {
+      const executedQuery = await db.sequelize.query(query);
+      // TODO: store in a db with sql questions
+      const correctQuery = `
       SELECT device_cat, count(device_cat)
       FROM sqltestgoogleusers
       WHERE EXISTS (
@@ -62,12 +91,13 @@ const checkAnswer = async (req, res) => {
       GROUP BY device_cat
       ORDER BY device_cat ASC
     `;
-    const executedCorrectQuery = await db.sequelize.query(correctQuery);
-    
-    if(deepEqual(executedQuery,executedCorrectQuery)) {
-      res.status(200).send('correct');  
-    } else {
-      res.status(200).send('Incorrect');
+      const executedCorrectQuery = await db.sequelize.query(correctQuery);
+
+      if (deepEqual(executedQuery, executedCorrectQuery)) {
+        res.status(200).send('correct');
+      } else {
+        res.status(200).send('Incorrect');
+      }
     }
   } catch (err) {
     res.status(200).send('Incorrect');
@@ -77,5 +107,5 @@ const checkAnswer = async (req, res) => {
 export default {
   executeQuery,
   getQuestion,
-  checkAnswer
+  checkAnswer,
 };
