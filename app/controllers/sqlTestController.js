@@ -94,13 +94,13 @@ const checkAnswer = async (req, res) => {
       const executedCorrectQuery = await db.sequelize.query(correctQuery);
 
       if (deepEqual(executedQuery, executedCorrectQuery)) {
-        res.status(200).send('correct');
+        res.status(200).send(true);
       } else {
-        res.status(200).send('Incorrect');
+        res.status(200).send(false);
       }
     }
   } catch (err) {
-    res.status(200).send('Incorrect');
+    res.status(200).send(true);
   }
 };
 
