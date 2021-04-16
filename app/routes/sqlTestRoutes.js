@@ -10,5 +10,6 @@ router.get(
   sqlTestController.executeQuery
 );
 router.get('/getQuestion', authJwt.verifyToken, sqlTestController.getQuestion);
+router.get('/submitAnswer', authJwt.verifyToken, sqlTestController.submitAnswer);
 
 export default router;

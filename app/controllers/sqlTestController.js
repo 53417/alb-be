@@ -1,16 +1,19 @@
 import db from '../models/index.js';
 import deepEqual from '../helpers/deepEqual.js';
+import buildError from '../utilities/errorHelper/errorHelper';
+
+const Result = db.result;
 
 const executeQuery = async (req, res) => {
   // execute the users query
   try {
-    const { query } = req.query;
+    const { query } = req;
     if (!verifyQuery(query)) {
       res.status(200).send('illegal query');
     }
     
     const executedQuery = await db.sequelize.query(query);
-    const isQueryCorrect = await checkAnswer(executedQuery)
+    const isQueryCorrect = await checkAnswer(executedQuery);
     res.status(200).send({
       queryResult: executedQuery[0],
       correct: isQueryCorrect
@@ -102,7 +105,25 @@ const checkAnswer = async (queryResultToBeChecked) => {
   }
 };
 
+const submitAnswer = async (req, res) => {
+  try{
+    const state = req.state
+    const newResult = {
+      user_id: state.user.id,
+      started_at: state.startTime,
+      completed_at: state.endTime,
+      query: state.query,
+      correct: state.correct
+    };
+    await Result.create(newResult);
+    res.status(200).send('Result successfully recorded');
+  } catch(err) {
+    res.status(500).send(buildError(500, [err]));
+  }
+};
+
 export default {
   executeQuery,
   getQuestion,
+  submitAnswer,
 };

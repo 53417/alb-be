@@ -4,6 +4,7 @@ import roles from './role.js';
 import users from './user.js';
 import sqltestusers from './sqltestuser.js';
 import sqltestgoogleusers from './sqltestgoogleusers.js';
+import results from './result.js'
 const sslrootcert = './app/config/ca.pem';
 
 const sequelize = new Sequelize(config.DB, config.USER, config.PASSWORD, {
@@ -46,8 +47,10 @@ db.sqltestgoogleuser = sequelize.define(
   'sqltestgoogleusers',
   sqltestgoogleusers
 );
+db.result = sequelize.define('result', results)
 
 db.role.hasMany(db.user);
 db.user.belongsTo(db.role);
+db.result.hasMany(db.user);
 
 export default db;
