@@ -7,7 +7,7 @@ const app = express();
 
 // front end
 let corsOptions = {
-  origin: 'http://localhost:53417',
+  origin: 'https://alb-fe.herokuapp.com/',
 };
 app.use(cors(corsOptions));
 
