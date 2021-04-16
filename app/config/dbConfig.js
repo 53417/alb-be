@@ -1,7 +1,7 @@
 export default {
   HOST: 'pg-215efa19-seanimal-c837.aivencloud.com',
-  USER: 'gitguy',
-  PASSWORD: 'ihdgsh4ny4oe5wbb',
+  USER: 'avnadmin',
+  PASSWORD: 'thiual7bkqvfyfw9',
   DB: 'sqltest',
   DIALECT: 'postgres',
   PORT: 12324,

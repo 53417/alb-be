@@ -61,8 +61,8 @@ const verifyQuery = (query) => {
     lower.includes('delete') ||
     lower.includes('insert') ||
     lower.includes('drop') ||
-    lower.includes(' users') ||
-    lower.includes(' roles')
+    lower.includes('from user') ||
+    lower.includes(' role')
   ) {
     return false;
   } else {

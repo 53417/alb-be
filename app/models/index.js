@@ -4,7 +4,7 @@ import roles from './role.js';
 import users from './user.js';
 import sqltestusers from './sqltestuser.js';
 import sqltestgoogleusers from './sqltestgoogleusers.js';
-const sslrootcert = '../config/ca.pem';
+const sslrootcert = './app/config/ca.pem';
 
 const sequelize = new Sequelize(config.DB, config.USER, config.PASSWORD, {
   host: config.HOST,
@@ -15,24 +15,24 @@ const sequelize = new Sequelize(config.DB, config.USER, config.PASSWORD, {
   dialectOptions: {
     ssl: {
       sslmode: 'verify-ca',
-      sslrootcert: sslrootcert
+      sslrootcert
     }
   },
-  operatorsAliases: {
-    $and: Sequelize.and,
-    $or: Sequelize.or,
-    $eq: Sequelize.eq,
-    $gt: Sequelize.gt,
-    $lt: Sequelize.lt,
-    $lte: Sequelize.lte,
-    $like: Sequelize.like,
-  },
-  pool: {
-    max: config.POOL.max,
-    min: config.POOL.min,
-    acquire: config.POOL.acquire,
-    idle: config.POOL.idle,
-  },
+  // operatorsAliases: {
+  //   $and: Sequelize.and,
+  //   $or: Sequelize.or,
+  //   $eq: Sequelize.eq,
+  //   $gt: Sequelize.gt,
+  //   $lt: Sequelize.lt,
+  //   $lte: Sequelize.lte,
+  //   $like: Sequelize.like,
+  // },
+  // pool: {
+  //   max: config.POOL.max,
+  //   min: config.POOL.min,
+  //   acquire: config.POOL.acquire,
+  //   idle: config.POOL.idle,
+  // },
 });
 const db = {};
 
