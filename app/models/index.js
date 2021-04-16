@@ -15,8 +15,8 @@ const sequelize = new Sequelize(config.DB, config.USER, config.PASSWORD, {
   dialectOptions: {
     ssl: {
       sslmode: 'verify-ca',
-      sslrootcert
-    }
+      sslrootcert,
+    },
   },
   // operatorsAliases: {
   //   $and: Sequelize.and,

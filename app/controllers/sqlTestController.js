@@ -62,7 +62,7 @@ const verifyQuery = (query) => {
     lower.includes('insert') ||
     lower.includes('drop') ||
     lower.includes('from user') ||
-    lower.includes(' role')
+    lower.includes('from role')
   ) {
     return false;
   } else {
