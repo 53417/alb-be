@@ -2,8 +2,14 @@ import Sequelize from 'sequelize';
 
 const results = {
   id: {
+    allowNull: false,
     primaryKey: true,
-    type: Sequelize.INTEGER,
+    type: Sequelize.UUID,
+    defaultValue: Sequelize.UUIDV4,
+    unique: true,
+    validate: {
+      notNull: true,
+    },
   },
   user_id: {
     type: Sequelize.UUID,

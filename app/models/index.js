@@ -4,36 +4,56 @@ import roles from './role.js';
 import users from './user.js';
 import sqltestusers from './sqltestuser.js';
 import sqltestgoogleusers from './sqltestgoogleusers.js';
-import results from './result.js'
-const sslrootcert = './app/config/ca.pem';
+import results from './result.js';
+// const sslrootcert = './app/config/ca.pem';
+
+// const sequelize = new Sequelize(config.DB, config.USER, config.PASSWORD, {
+//   host: config.HOST,
+//   port: config.PORT,
+//   dialect: config.DIALECT,
+//   native: true,
+//   ssl: true,
+//   dialectOptions: {
+//     ssl: {
+//       sslmode: 'verify-ca',
+//       sslrootcert,
+//     },
+//   },
+//   // operatorsAliases: {
+//   //   $and: Sequelize.and,
+//   //   $or: Sequelize.or,
+//   //   $eq: Sequelize.eq,
+//   //   $gt: Sequelize.gt,
+//   //   $lt: Sequelize.lt,
+//   //   $lte: Sequelize.lte,
+//   //   $like: Sequelize.like,
+//   // },
+//   // pool: {
+//   //   max: config.POOL.max,
+//   //   min: config.POOL.min,
+//   //   acquire: config.POOL.acquire,
+//   //   idle: config.POOL.idle,
+//   // },
+// });
 
 const sequelize = new Sequelize(config.DB, config.USER, config.PASSWORD, {
   host: config.HOST,
-  port: config.PORT,
-  dialect: config.DIALECT,
-  native: true,
-  ssl: true,
-  dialectOptions: {
-    ssl: {
-      sslmode: 'verify-ca',
-      sslrootcert,
-    },
+  dialect: config.dialect,
+  operatorsAliases: {
+    $and: Sequelize.and,
+    $or: Sequelize.or,
+    $eq: Sequelize.eq,
+    $gt: Sequelize.gt,
+    $lt: Sequelize.lt,
+    $lte: Sequelize.lte,
+    $like: Sequelize.like,
   },
-  // operatorsAliases: {
-  //   $and: Sequelize.and,
-  //   $or: Sequelize.or,
-  //   $eq: Sequelize.eq,
-  //   $gt: Sequelize.gt,
-  //   $lt: Sequelize.lt,
-  //   $lte: Sequelize.lte,
-  //   $like: Sequelize.like,
-  // },
-  // pool: {
-  //   max: config.POOL.max,
-  //   min: config.POOL.min,
-  //   acquire: config.POOL.acquire,
-  //   idle: config.POOL.idle,
-  // },
+  pool: {
+    max: config.pool.max,
+    min: config.pool.min,
+    acquire: config.pool.acquire,
+    idle: config.pool.idle,
+  },
 });
 const db = {};
 
@@ -47,7 +67,7 @@ db.sqltestgoogleuser = sequelize.define(
   'sqltestgoogleusers',
   sqltestgoogleusers
 );
-db.result = sequelize.define('result', results)
+db.result = sequelize.define('results', results);
 
 db.role.hasMany(db.user);
 db.user.belongsTo(db.role);

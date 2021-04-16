@@ -1,13 +1,13 @@
 import db from '../models/index.js';
 import deepEqual from '../helpers/deepEqual.js';
-import buildError from '../utilities/errorHelper/errorHelper';
+import buildError from '../utilities/errorHelper/errorHelper.js';
 
 const Result = db.result;
 
 const executeQuery = async (req, res) => {
   // execute the users query
   try {
-    const { query } = req;
+    const { query } = req.query;
     if (!verifyQuery(query)) {
       res.status(200).send('illegal query');
     }
@@ -107,13 +107,12 @@ const checkAnswer = async (queryResultToBeChecked) => {
 
 const submitAnswer = async (req, res) => {
   try{
-    const state = req.state
     const newResult = {
-      user_id: state.user.id,
-      started_at: state.startTime,
-      completed_at: state.endTime,
-      query: state.query,
-      correct: state.correct
+      user_id: req.userId,
+      started_at: req.query.startTime || null,
+      completed_at: req.query.endTime || null,
+      query: req.query.query || null,
+      correct: req.query.correct || false
     };
     await Result.create(newResult);
     res.status(200).send('Result successfully recorded');
