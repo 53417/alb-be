@@ -100,7 +100,7 @@ const checkAnswer = async (req, res) => {
       }
     }
   } catch (err) {
-    res.status(200).send(true);
+    res.status(200).send(false);
   }
 };
 
