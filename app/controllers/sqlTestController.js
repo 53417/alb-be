@@ -7,10 +7,14 @@ const executeQuery = async (req, res) => {
     const { query } = req.query;
     if (!verifyQuery(query)) {
       res.status(200).send('illegal query');
-    } else {
-      const executedQuery = await db.sequelize.query(query);
-      res.status(200).send(executedQuery[0]);
     }
+    
+    const executedQuery = await db.sequelize.query(query);
+    const isQueryCorrect = await checkAnswer(executedQuery)
+    res.status(200).send({
+      queryResult: executedQuery[0],
+      correct: isQueryCorrect
+    });
   } catch (err) {
     res.status(200).send(err.message);
   }
@@ -70,42 +74,35 @@ const verifyQuery = (query) => {
   }
 };
 
-const checkAnswer = async (req, res) => {
+const checkAnswer = async (queryResultToBeChecked) => {
   try {
-    const { query } = req.query;
-    if (!verifyQuery(query)) {
-      res.status(200).send('illegal query');
-    } else {
-      const executedQuery = await db.sequelize.query(query);
-      // TODO: store in a db with sql questions
-      const correctQuery = `
-      SELECT device_cat, count(device_cat)
-      FROM sqltestgoogleusers
-      WHERE EXISTS (
-          SELECT user_id
-          FROM sqltestusers
-          WHERE EXTRACT(MONTH FROM last_login) = 7
-          AND EXTRACT( YEAR FROM last_login) = 2019
-          AND sqltestusers.user_id = sqltestgoogleusers.user_id
-      )
-      GROUP BY device_cat
-      ORDER BY device_cat ASC
-    `;
-      const executedCorrectQuery = await db.sequelize.query(correctQuery);
+    // TODO: store in a db with sql questions
+    const correctQuery = `
+    SELECT device_cat, count(device_cat)
+    FROM sqltestgoogleusers
+    WHERE EXISTS (
+        SELECT user_id
+        FROM sqltestusers
+        WHERE EXTRACT(MONTH FROM last_login) = 7
+        AND EXTRACT( YEAR FROM last_login) = 2019
+        AND sqltestusers.user_id = sqltestgoogleusers.user_id
+    )
+    GROUP BY device_cat
+    ORDER BY device_cat ASC
+  `;
+    const executedCorrectQuery = await db.sequelize.query(correctQuery);
 
-      if (deepEqual(executedQuery, executedCorrectQuery)) {
-        res.status(200).send(true);
-      } else {
-        res.status(200).send(false);
-      }
+    if (deepEqual(queryResultToBeChecked, executedCorrectQuery)) {
+      return true;
+    } else {
+      return false;
     }
   } catch (err) {
-    res.status(200).send(false);
+    throw err;
   }
 };
 
 export default {
   executeQuery,
   getQuestion,
-  checkAnswer,
 };
