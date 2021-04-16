@@ -6,10 +6,10 @@ import routes from './app/routes/index.js';
 const app = express();
 
 // front end
-let corsOptions = {
-  origin: 'https://alb-fe.herokuapp.com/',
-};
-app.use(cors(corsOptions));
+// let corsOptions = {
+//   origin: 'https://alb-fe.herokuapp.com/',
+// };
+app.use(cors());
 
 // parse requests of content-type - application/json
 app.use(bodyParser.json());
