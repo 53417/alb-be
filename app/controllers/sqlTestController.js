@@ -11,12 +11,12 @@ const executeQuery = async (req, res) => {
     if (!verifyQuery(query)) {
       res.status(200).send('illegal query');
     }
-    
+
     const executedQuery = await db.sequelize.query(query);
     const isQueryCorrect = await checkAnswer(executedQuery);
     res.status(200).send({
       queryResult: executedQuery[0],
-      correct: isQueryCorrect
+      correct: isQueryCorrect,
     });
   } catch (err) {
     res.status(200).send(err.message);
@@ -106,17 +106,17 @@ const checkAnswer = async (queryResultToBeChecked) => {
 };
 
 const submitAnswer = async (req, res) => {
-  try{
+  try {
     const newResult = {
       user_id: req.userId,
       started_at: req.query.startTime || null,
       completed_at: req.query.endTime || null,
       query: req.query.query || null,
-      correct: req.query.correct || false
+      correct: req.query.correct || false,
     };
     await Result.create(newResult);
     res.status(200).send('Result successfully recorded');
-  } catch(err) {
+  } catch (err) {
     res.status(500).send(buildError(500, [err]));
   }
 };

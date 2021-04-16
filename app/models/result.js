@@ -15,17 +15,17 @@ const results = {
     type: Sequelize.UUID,
   },
   started_at: {
-    type: Sequelize.DATE
+    type: Sequelize.DATE,
   },
   completed_at: {
-    type: Sequelize.DATE
+    type: Sequelize.DATE,
   },
   query: {
-    type: Sequelize.STRING
+    type: Sequelize.STRING,
   },
   correct: {
-    type: Sequelize.BOOLEAN
-  }
+    type: Sequelize.BOOLEAN,
+  },
 };
 
 export default results;
