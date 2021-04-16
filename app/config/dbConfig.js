@@ -3,11 +3,12 @@ export default {
   USER: 'gitguy',
   PASSWORD: 'ihdgsh4ny4oe5wbb',
   DB: 'sqltest',
-  dialect: 'postgres',
-  pool: {
+  DIALECT: 'postgres',
+  PORT: 12324,
+  POOL: {
     max: 5,
     min: 0,
     acquire: 30000,
     idle: 10000,
-  },
+  }
 };

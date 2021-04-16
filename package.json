@@ -24,6 +24,7 @@
     "jsonwebtoken": "^8.5.1",
     "luxon": "^1.25.0",
     "pg": "^8.4.0",
+    "pg-native": "^3.0.0",
     "sequelize": "^5.21.3"
   },
   "devDependencies": {

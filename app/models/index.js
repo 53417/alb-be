@@ -4,10 +4,20 @@ import roles from './role.js';
 import users from './user.js';
 import sqltestusers from './sqltestuser.js';
 import sqltestgoogleusers from './sqltestgoogleusers.js';
+const sslrootcert = '../config/ca.pem';
 
 const sequelize = new Sequelize(config.DB, config.USER, config.PASSWORD, {
   host: config.HOST,
-  dialect: config.dialect,
+  port: config.PORT,
+  dialect: config.DIALECT,
+  native: true,
+  ssl: true,
+  dialectOptions: {
+    ssl: {
+      sslmode: 'verify-ca',
+      sslrootcert: sslrootcert
+    }
+  },
   operatorsAliases: {
     $and: Sequelize.and,
     $or: Sequelize.or,
@@ -18,10 +28,10 @@ const sequelize = new Sequelize(config.DB, config.USER, config.PASSWORD, {
     $like: Sequelize.like,
   },
   pool: {
-    max: config.pool.max,
-    min: config.pool.min,
-    acquire: config.pool.acquire,
-    idle: config.pool.idle,
+    max: config.POOL.max,
+    min: config.POOL.min,
+    acquire: config.POOL.acquire,
+    idle: config.POOL.idle,
   },
 });
 const db = {};
