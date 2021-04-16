@@ -64,12 +64,14 @@ const getQuestion = (req, res) => {
 const verifyQuery = (query) => {
   const lower = query.toString().toLowerCase();
   if (
+    lower.includes('create') ||
     lower.includes('update') ||
     lower.includes('delete') ||
     lower.includes('insert') ||
     lower.includes('drop') ||
     lower.includes('from user') ||
-    lower.includes('from role')
+    lower.includes('from role') ||
+    lower.includes('from result')
   ) {
     return false;
   } else {
