@@ -1,8 +1,8 @@
 export default {
-  HOST: 'localhost',
-  USER: 'local',
-  PASSWORD: 'local',
-  DB: 'booka',
+  HOST: 'pg-215efa19-seanimal-c837.aivencloud.com',
+  USER: 'gitguy',
+  PASSWORD: 'ihdgsh4ny4oe5wbb',
+  DB: 'sqltest',
   dialect: 'postgres',
   pool: {
     max: 5,
